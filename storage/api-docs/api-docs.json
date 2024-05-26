@@ -1,0 +1,1143 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My CV project",
+        "description": "API Documentation for CV project",
+        "contact": {
+            "email": "timur.shevtsov1984@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/api",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/providers": {
+            "get": {
+                "tags": [
+                    "Providers"
+                ],
+                "summary": "Get list of providers",
+                "operationId": "getProviders",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/ProviderRequest/properties/search"
+                        }
+                    },
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/ProviderRequest/properties/sortBy"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/ProviderRequest/properties/direction"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/ProviderRequest/properties/page"
+                        }
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/ProviderRequest/properties/perPage"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of providers",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/ProviderResource"
+                                            }
+                                        },
+                                        "total": {
+                                            "description": "Total number of providers",
+                                            "type": "integer"
+                                        },
+                                        "perPage": {
+                                            "description": "Number of providers per page",
+                                            "type": "integer"
+                                        },
+                                        "page": {
+                                            "description": "Current page number",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Providers"
+                ],
+                "summary": "Create provider",
+                "operationId": "storeProvider",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreProviderRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Provider created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/ProviderResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/providers/{providerId}": {
+            "get": {
+                "tags": [
+                    "Providers"
+                ],
+                "summary": "Get provider's data",
+                "operationId": "getProvider",
+                "parameters": [
+                    {
+                        "name": "providerId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A provider's data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/ProviderResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Providers"
+                ],
+                "summary": "Update provider",
+                "operationId": "updateProvider",
+                "parameters": [
+                    {
+                        "name": "providerId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateProviderRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Provider updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/ProviderResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Providers"
+                ],
+                "summary": "Delete provider",
+                "operationId": "deleteProvider",
+                "parameters": [
+                    {
+                        "name": "providerId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Provider deleted successfully"
+                    }
+                }
+            }
+        },
+        "/providers/{providerId}/sites": {
+            "post": {
+                "tags": [
+                    "Providers"
+                ],
+                "summary": "Attach site to provider",
+                "operationId": "attachSite",
+                "parameters": [
+                    {
+                        "name": "providerId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AttachSiteRequest/properties/site_id"
+                        }
+                    },
+                    {
+                        "name": "active",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AttachSiteRequest/properties/active"
+                        }
+                    },
+                    {
+                        "name": "external_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/AttachSiteRequest/properties/external_id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Site attached successfully"
+                    }
+                }
+            }
+        },
+        "/providers/{providerId}/sites/{siteId}": {
+            "delete": {
+                "tags": [
+                    "Providers"
+                ],
+                "summary": "Detach site from provider",
+                "operationId": "detachSite",
+                "parameters": [
+                    {
+                        "name": "providerId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "siteId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Site detached successfully"
+                    }
+                }
+            }
+        },
+        "/sites": {
+            "get": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Get list of sites",
+                "operationId": "getSites",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/SiteRequest/properties/search"
+                        }
+                    },
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/SiteRequest/properties/sortBy"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/SiteRequest/properties/direction"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/SiteRequest/properties/page"
+                        }
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/SiteRequest/properties/perPage"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of sites",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/SiteResource"
+                                            }
+                                        },
+                                        "total": {
+                                            "description": "Total number of sites",
+                                            "type": "integer"
+                                        },
+                                        "perPage": {
+                                            "description": "Number of sites per page",
+                                            "type": "integer"
+                                        },
+                                        "page": {
+                                            "description": "Current page number",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Create site",
+                "operationId": "storeSite",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreSiteRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Site created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SiteResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sites/{siteId}": {
+            "get": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Get site's data",
+                "operationId": "getSite",
+                "parameters": [
+                    {
+                        "name": "siteId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A site's data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/SiteResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Update site",
+                "operationId": "updateSite",
+                "parameters": [
+                    {
+                        "name": "siteId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateSiteRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Site updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SiteResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Delete site",
+                "operationId": "deleteSite",
+                "parameters": [
+                    {
+                        "name": "siteId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Provider deleted successfully"
+                    }
+                }
+            }
+        },
+        "/sites/{siteId}/providers/{providerId}": {
+            "put": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Update provider site fields",
+                "operationId": "updateProviderSiteFields",
+                "parameters": [
+                    {
+                        "name": "siteId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "providerId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateProviderSiteRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Provider site fields updated successfully"
+                    }
+                }
+            }
+        },
+        "/statistics/sites/{siteId}": {
+            "get": {
+                "tags": [
+                    "Statistics"
+                ],
+                "summary": "Get statistics by site",
+                "operationId": "getAllBySite",
+                "parameters": [
+                    {
+                        "name": "siteId",
+                        "in": "path",
+                        "description": "Site ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/GetStatisticRequest/properties/sortBy"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/GetStatisticRequest/properties/direction"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/GetStatisticRequest/properties/page"
+                        }
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/GetStatisticRequest/properties/perPage"
+                        }
+                    },
+                    {
+                        "name": "dateFrom",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/GetStatisticRequest/properties/dateFrom"
+                        }
+                    },
+                    {
+                        "name": "dateTo",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/GetStatisticRequest/properties/dateTo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Statistics by site",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/StatisticResource"
+                                            }
+                                        },
+                                        "total": {
+                                            "description": "Total number of statistic objects",
+                                            "type": "integer"
+                                        },
+                                        "perPage": {
+                                            "description": "Number of statistic objects per page",
+                                            "type": "integer"
+                                        },
+                                        "page": {
+                                            "description": "Current page number",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/statistics/providers/{providerId}": {
+            "get": {
+                "tags": [
+                    "Statistics"
+                ],
+                "summary": "Get statistics by site",
+                "operationId": "getAllByProvider",
+                "parameters": [
+                    {
+                        "name": "providerId",
+                        "in": "path",
+                        "description": "Provider ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/GetStatisticRequest/properties/sortBy"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/GetStatisticRequest/properties/direction"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/GetStatisticRequest/properties/page"
+                        }
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/GetStatisticRequest/properties/perPage"
+                        }
+                    },
+                    {
+                        "name": "dateFrom",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/GetStatisticRequest/properties/dateFrom"
+                        }
+                    },
+                    {
+                        "name": "dateTo",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/GetStatisticRequest/properties/dateTo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Statistics by provider",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/StatisticResource"
+                                            }
+                                        },
+                                        "total": {
+                                            "description": "Total number of statistic objects",
+                                            "type": "integer"
+                                        },
+                                        "perPage": {
+                                            "description": "Number of statistic objects per page",
+                                            "type": "integer"
+                                        },
+                                        "page": {
+                                            "description": "Current page number",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AttachSiteRequest": {
+                "required": [
+                    "site_id",
+                    "active",
+                    "external_id"
+                ],
+                "properties": {
+                    "site_id": {
+                        "description": "The ID of the site",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "active": {
+                        "description": "Whether the site is active",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "external_id": {
+                        "description": "The external ID of the site",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "ext12345"
+                    }
+                },
+                "type": "object"
+            },
+            "GetStatisticRequest": {
+                "properties": {
+                    "dateFrom": {
+                        "description": "Start date for the statistics in YYYY-MM-DD format",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2023-01-01"
+                    },
+                    "dateTo": {
+                        "description": "End date for the statistics in YYYY-MM-DD format",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2023-01-31"
+                    },
+                    "direction": {
+                        "description": "Sort direction",
+                        "type": "string",
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "example": "asc"
+                    },
+                    "sortBy": {
+                        "description": "Field to sort by",
+                        "type": "string",
+                        "enum": [
+                            "impressions",
+                            "revenue"
+                        ],
+                        "example": "impressions"
+                    },
+                    "perPage": {
+                        "description": "Number of items per page",
+                        "type": "integer",
+                        "maximum": 100,
+                        "minimum": 1,
+                        "example": 10
+                    },
+                    "page": {
+                        "description": "Page number",
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "ProviderRequest": {
+                "properties": {
+                    "search": {
+                        "description": "Search term",
+                        "type": "string",
+                        "maxLength": 10,
+                        "minLength": 3,
+                        "example": "example"
+                    },
+                    "sortBy": {
+                        "description": "Field to sort by",
+                        "type": "string",
+                        "enum": [
+                            "id",
+                            "name",
+                            "active"
+                        ],
+                        "example": "id"
+                    },
+                    "direction": {
+                        "description": "Sort direction",
+                        "type": "string",
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "example": "asc"
+                    },
+                    "page": {
+                        "description": "Page number",
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": 1
+                    },
+                    "perPage": {
+                        "description": "Number of items per page",
+                        "type": "integer",
+                        "maximum": 100,
+                        "minimum": 1,
+                        "example": 10
+                    }
+                },
+                "type": "object"
+            },
+            "SiteRequest": {
+                "properties": {
+                    "search": {
+                        "description": "Search term",
+                        "type": "string",
+                        "maxLength": 10,
+                        "minLength": 3,
+                        "example": "example"
+                    },
+                    "sortBy": {
+                        "description": "Field to sort by",
+                        "type": "string",
+                        "enum": [
+                            "id",
+                            "name",
+                            "url",
+                            "provider_key"
+                        ],
+                        "example": "name"
+                    },
+                    "direction": {
+                        "description": "Sort direction",
+                        "type": "string",
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "example": "asc"
+                    },
+                    "page": {
+                        "description": "Page number",
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": 1
+                    },
+                    "perPage": {
+                        "description": "Number of items per page",
+                        "type": "integer",
+                        "maximum": 100,
+                        "minimum": 1,
+                        "example": 10
+                    }
+                },
+                "type": "object"
+            },
+            "StoreProviderRequest": {
+                "required": [
+                    "name",
+                    "tech_name",
+                    "active"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "The name of the provider",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Example Provider"
+                    },
+                    "tech_name": {
+                        "description": "The technical name of the provider",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "example_provider"
+                    },
+                    "active": {
+                        "description": "Whether the provider is active",
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "StoreSiteRequest": {
+                "required": [
+                    "name",
+                    "url",
+                    "provider_key"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "The name of the site",
+                        "type": "string",
+                        "maxLength": 255,
+                        "minLength": 1,
+                        "example": "Example Site"
+                    },
+                    "url": {
+                        "description": "The URL of the site",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "https://www.example.com"
+                    },
+                    "provider_key": {
+                        "description": "The provider key for the site",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "example_provider_key"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateProviderRequest": {
+                "properties": {
+                    "name": {
+                        "description": "The name of the provider",
+                        "type": "string",
+                        "maxLength": 255,
+                        "minLength": 5,
+                        "example": "Example Provider Name"
+                    },
+                    "active": {
+                        "description": "The active status of the provider",
+                        "type": "boolean",
+                        "example": "true"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateProviderSiteRequest": {
+                "properties": {
+                    "active": {
+                        "description": "Whether the provider site is active",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "external_id": {
+                        "description": "The external ID of the provider site",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "external123"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateSiteRequest": {
+                "properties": {
+                    "name": {
+                        "description": "The name of the site",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Updated Site Name"
+                    },
+                    "url": {
+                        "description": "The URL of the site",
+                        "type": "string",
+                        "maxLength": 2048,
+                        "example": "https://www.updated-example.com"
+                    },
+                    "provider_key": {
+                        "description": "The provider key for the site",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "updated_provider_key"
+                    }
+                },
+                "type": "object"
+            },
+            "ProviderResource": {
+                "title": "Provider Resource",
+                "properties": {
+                    "id": {
+                        "description": "ID of the provider",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Name of the provider",
+                        "type": "string"
+                    },
+                    "active": {
+                        "description": "Active status of the provider",
+                        "type": "boolean"
+                    },
+                    "created_at": {
+                        "description": "Creation timestamp",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "SiteResource": {
+                "title": "Site Resource",
+                "properties": {
+                    "id": {
+                        "description": "ID of the site",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Name of the site",
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "URL of the site",
+                        "type": "string"
+                    },
+                    "provider_key": {
+                        "description": "Provider key of the site",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Creation timestamp",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "StatisticResource": {
+                "title": "Statistic Resource",
+                "properties": {
+                    "id": {
+                        "description": "ID of the statistic",
+                        "type": "integer"
+                    },
+                    "provider_id": {
+                        "description": "ID of the provider",
+                        "type": "integer"
+                    },
+                    "collected_at": {
+                        "description": "Timestamp when the data was collected",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "collected_date": {
+                        "description": "Date when the data was collected",
+                        "type": "string"
+                    },
+                    "site_id": {
+                        "description": "ID of the site",
+                        "type": "integer"
+                    },
+                    "impressions": {
+                        "description": "Number of impressions",
+                        "type": "integer"
+                    },
+                    "revenue": {
+                        "description": "Revenue generated",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "created_at": {
+                        "description": "Creation timestamp",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Providers"
+        },
+        {
+            "name": "Sites"
+        },
+        {
+            "name": "Statistics"
+        }
+    ]
+}
