@@ -2,6 +2,8 @@
 
 namespace App\DTO;
 
+use App\Enums\PaginationEnum;
+
 class GetStatisticDTO extends BaseDTO
 {
     public ?string $dateFrom = null;
@@ -33,12 +35,12 @@ class GetStatisticDTO extends BaseDTO
 
     public function getPerPage(): int
     {
-        return $this->perPage ?? 10;
+        return $this->perPage ?? PaginationEnum::PER_PAGE_10->value;
     }
 
     public function getOffset(): int
     {
-        return ($this->page - 1) * $this->perPage;
+        return ($this->getPage() - 1) * $this->getPerPage();
     }
 
     public function getPage(): ?int

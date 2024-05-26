@@ -6,6 +6,13 @@ use App\Enums\PaginationEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property string search
+ * @property string sortBy
+ * @property string direction
+ * @property int page
+ * @property int perPage
+ */
 class ProviderRequest extends FormRequest
 {
     /**
@@ -25,7 +32,7 @@ class ProviderRequest extends FormRequest
                 'min:3',
                 'max:10',
             ],
-            'sort' => [
+            'sortBy' => [
                 'sometimes',
                 'string',
                 'in:id,name,active',
@@ -40,7 +47,7 @@ class ProviderRequest extends FormRequest
                 'integer',
                 'min:1',
             ],
-            'per_page' => [
+            'perPage' => [
                 'sometimes',
                 'integer',
                 Rule::enum(PaginationEnum::class)

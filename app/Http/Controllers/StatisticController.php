@@ -21,7 +21,7 @@ class StatisticController extends Controller
 
         $statisticDTO = $this->siteStatisticService->getAllByProvider($site, $dto);
 
-        return StatisticCollection::make($statisticDTO->getStatistics())->additional([
+        return StatisticCollection::make($statisticDTO->getData())->additional([
             'total' => $statisticDTO->getPaginator()->getTotal(),
             'perPage' => $statisticDTO->getPaginator()->getPerPage(),
             'page' => $statisticDTO->getPaginator()->getPage(),
@@ -37,7 +37,7 @@ class StatisticController extends Controller
 
         $statisticDTO = $this->siteStatisticService->getAllByProvider($provider, $dto);
 
-        return StatisticCollection::make($statisticDTO->getStatistics())->additional([
+        return StatisticCollection::make($statisticDTO->getData())->additional([
             'total' => $statisticDTO->getPaginator()->getTotal(),
             'perPage' => $statisticDTO->getPaginator()->getPerPage(),
             'page' => $statisticDTO->getPaginator()->getPage(),

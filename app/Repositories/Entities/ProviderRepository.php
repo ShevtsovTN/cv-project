@@ -3,8 +3,11 @@
 namespace App\Repositories\Entities;
 
 use App\DTO\AttachSiteDTO;
+use App\DTO\GetStatisticDTO;
 use App\DTO\IndexDTO;
+use App\DTO\PaginatorDTO;
 use App\DTO\ProviderDTO;
+use App\DTO\ResponseDTO;
 use App\DTO\SiteDTO;
 use App\DTO\StatisticSiteDTO;
 use App\DTO\StoreProviderDTO;
@@ -19,16 +22,24 @@ use Illuminate\Support\Facades\DB;
 
 class ProviderRepository implements ProviderRepositoryInterface
 {
-    public function getMany(IndexDTO $dto): Paginator
+    public function getMany(IndexDTO $dto): ResponseDTO
     {
-        return Provider::query()
-            ->when(!empty($dto->search), function ($query) use ($dto) {
-                $query->where('name', 'like', '%' . $dto->search . '%');
+        $baseQuery = Provider::query()
+            ->when(!empty($dto->getSearch()), function ($query) use ($dto) {
+                $query->where('name', 'like', '%' . $dto->getSearch() . '%');
             })
-            ->when(!empty($dto->sort) && !empty($dto->direction), function ($query) use ($dto) {
-                $query->orderBy($dto->sort, $dto->direction);
-            })
-            ->simplePaginate($dto->per_page ?? PaginationEnum::PER_PAGE_10->value);
+            ->when(!empty($dto->getSortBy()) && !empty($dto->getDirection()), function ($query) use ($dto) {
+                $query->orderBy($dto->getSortBy(), $dto->getDirection());
+            });
+
+        $total = $baseQuery->count();
+
+        $providers = $baseQuery
+            ->offset($dto->getOffset())
+            ->limit($dto->getPerPage())
+            ->get();
+
+        return $this->getResponseDTO($providers, $total, $dto);
     }
 
     public function find(int $id): ProviderDTO
@@ -176,5 +187,18 @@ class ProviderRepository implements ProviderRepositoryInterface
                 ]);
             });
         });
+    }
+
+    private function getResponseDTO(Collection $providers, int $total, IndexDTO $dto): ResponseDTO
+    {
+        return (new ResponseDTO())
+            ->setData($providers->map(fn(Provider $provider) => new ProviderDTO($provider->toArray())))
+            ->setPaginator(
+                new PaginatorDTO([
+                    'total' => $total,
+                    'perPage' => $dto->getPerPage(),
+                    'currentPage' => $dto->getPage(),
+                ])
+            );
     }
 }

@@ -4,14 +4,18 @@ namespace App\DTO;
 
 use Illuminate\Support\Collection;
 
-class StatisticResponseDTO extends BaseDTO
+/**
+ * @property Collection $data
+ * @property PaginatorDTO $paginator
+ */
+class ResponseDTO extends BaseDTO
 {
-    public ?Collection $statistics = null;
+    public ?Collection $data = null;
     public ?PaginatorDTO $paginator = null;
 
-    public function setStatistics(Collection $statistics): self
+    public function setData(Collection $data): self
     {
-        $this->statistics = $statistics;
+        $this->data = $data;
         return $this;
     }
 
@@ -21,9 +25,9 @@ class StatisticResponseDTO extends BaseDTO
         return $this;
     }
 
-    public function getStatistics(): Collection
+    public function getData(): Collection
     {
-        return $this->statistics;
+        return $this->data;
     }
 
     public function getPaginator(): PaginatorDTO

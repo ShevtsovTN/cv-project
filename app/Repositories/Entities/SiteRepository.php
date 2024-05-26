@@ -3,6 +3,8 @@
 namespace App\Repositories\Entities;
 
 use App\DTO\IndexDTO;
+use App\DTO\PaginatorDTO;
+use App\DTO\ResponseDTO;
 use App\DTO\SiteDTO;
 use App\DTO\StoreSiteDTO;
 use App\DTO\UpdateProviderSiteDTO;
@@ -12,22 +14,31 @@ use App\Interfaces\SiteRepositoryInterface;
 use App\Models\Site;
 use Exception;
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class SiteRepository implements SiteRepositoryInterface
 {
 
-    public function getMany(IndexDTO $dto): Paginator
+    public function getMany(IndexDTO $dto): ResponseDTO
     {
-        return Site::query()
-            ->when(!empty($dto->search), function ($query) use ($dto) {
-                $query->where('name', 'like', '%' . $dto->search . '%')
-                    ->orWhere('url', 'like', '%' . $dto->search . '%');
+        $baseQuery = Site::query()
+            ->when(!empty($dto->getSearch()), function ($query) use ($dto) {
+                $query->where('name', 'like', '%' . $dto->getSearch() . '%')
+                    ->orWhere('url', 'like', '%' . $dto->getSearch() . '%');
             })
-            ->when(!empty($dto->sort) && !empty($dto->direction), function ($query) use ($dto) {
-                $query->orderBy($dto->sort, $dto->direction);
-            })
-            ->simplePaginate($dto->per_page ?? PaginationEnum::PER_PAGE_10->value);
+            ->when(!empty($dto->getSortBy()) && !empty($dto->getDirection()), function ($query) use ($dto) {
+                $query->orderBy($dto->getSortBy(), $dto->getDirection());
+            });
+
+        $total = $baseQuery->count();
+
+        $providers = $baseQuery
+            ->offset($dto->getOffset())
+            ->limit($dto->getPerPage())
+            ->get();
+
+        return $this->getResponseDTO($providers, $total, $dto);
     }
 
     public function find(int $siteId): SiteDTO
@@ -109,5 +120,18 @@ class SiteRepository implements SiteRepositoryInterface
         $site = Site::query()->findOrFail($siteId);
         $site->providers()
             ->updateExistingPivot($providerId, $updateProviderSiteDTO->toArray());
+    }
+
+    private function getResponseDTO(Collection $sites, int $total, IndexDTO $dto): ResponseDTO
+    {
+        return (new ResponseDTO())
+            ->setData($sites->map(fn(Site $site) => new SiteDTO($site->toArray())))
+            ->setPaginator(
+                new PaginatorDTO([
+                    'total' => $total,
+                    'perPage' => $dto->getPerPage(),
+                    'currentPage' => $dto->getPage(),
+                ])
+            );
     }
 }

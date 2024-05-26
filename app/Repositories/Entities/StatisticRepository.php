@@ -6,7 +6,7 @@ use App\DTO\GetStatisticDTO;
 use App\DTO\PaginatorDTO;
 use App\DTO\ProviderDTO;
 use App\DTO\SiteDTO;
-use App\DTO\StatisticResponseDTO;
+use App\DTO\ResponseDTO;
 use App\Interfaces\ProviderRepositoryInterface;
 use App\Interfaces\SiteRepositoryInterface;
 use App\Interfaces\StatisticRepositoryInterface;
@@ -23,7 +23,7 @@ readonly class StatisticRepository implements StatisticRepositoryInterface
     ) {
     }
 
-    public function getAllBySite(int $siteId, GetStatisticDTO $dto): StatisticResponseDTO
+    public function getAllBySite(int $siteId, GetStatisticDTO $dto): ResponseDTO
     {
         $site = $this->siteRepository->find($siteId);
 
@@ -41,7 +41,7 @@ readonly class StatisticRepository implements StatisticRepositoryInterface
         return $this->getStatisticResponseDTO($statistics, $total, $dto);
     }
 
-    public function getAllByProvider(int $providerId, GetStatisticDTO $dto): StatisticResponseDTO
+    public function getAllByProvider(int $providerId, GetStatisticDTO $dto): ResponseDTO
     {
         $provider = $this->providerRepository->find($providerId);
 
@@ -72,12 +72,12 @@ readonly class StatisticRepository implements StatisticRepositoryInterface
      * @param Collection $statistics
      * @param int $total
      * @param GetStatisticDTO $dto
-     * @return StatisticResponseDTO
+     * @return ResponseDTO
      */
-    private function getStatisticResponseDTO(Collection $statistics, int $total, GetStatisticDTO $dto): StatisticResponseDTO
+    private function getStatisticResponseDTO(Collection $statistics, int $total, GetStatisticDTO $dto): ResponseDTO
     {
-        return (new StatisticResponseDTO())
-            ->setStatistics($statistics)
+        return (new ResponseDTO())
+            ->setData($statistics)
             ->setPaginator(
                 new PaginatorDTO([
                     'total' => $total,

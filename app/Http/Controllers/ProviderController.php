@@ -23,9 +23,11 @@ class ProviderController extends Controller
     public function index(ProviderRequest $request, IndexDTO $dto): ProviderCollection
     {
         $dto->setAttributes($request->validated());
-        return ProviderCollection::make(
-            $this->providerService->getMany($dto)
-        );
+
+        $providersDTO = $this->providerService->getMany($dto);
+
+        return ProviderCollection::make($providersDTO->getData())
+            ->additional(['paginator' => $providersDTO->getPaginator()]);
     }
 
     public function store(StoreProviderRequest $request, StoreProviderDTO $storeProviderDTO): ProviderResource

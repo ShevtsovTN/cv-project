@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\DTO\GetStatisticDTO;
-use App\DTO\StatisticResponseDTO;
+use App\DTO\ResponseDTO;
 use App\Interfaces\StatisticRepositoryInterface;
 use Illuminate\Support\Collection;
 
@@ -13,12 +13,12 @@ readonly class StatisticService
     {
     }
 
-    public function getAllBySite(int $siteId, GetStatisticDTO $dto): StatisticResponseDTO
+    public function getAllBySite(int $siteId, GetStatisticDTO $dto): ResponseDTO
     {
         return $this->statisticRepository->getAllBySite($siteId, $dto);
     }
 
-    public function getAllByProvider(int $providerId, GetStatisticDTO $dto): StatisticResponseDTO
+    public function getAllByProvider(int $providerId, GetStatisticDTO $dto): ResponseDTO
     {
         return $this->statisticRepository->getAllByProvider($providerId, $dto);
     }

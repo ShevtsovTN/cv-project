@@ -8,10 +8,10 @@ use Illuminate\Validation\Rule;
 
 /**
  * @property string search
- * @property string sort
+ * @property string sortBy
  * @property string direction
  * @property int page
- * @property int per_page
+ * @property int perPage
  */
 class SitesRequest extends FormRequest
 {
@@ -32,7 +32,7 @@ class SitesRequest extends FormRequest
                 'min:3',
                 'max:10',
             ],
-            'sort' => [
+            'sortBy' => [
                 'sometimes',
                 'string',
                 'in:id,name,url,provider_key',
@@ -47,7 +47,7 @@ class SitesRequest extends FormRequest
                 'integer',
                 'min:1',
             ],
-            'per_page' => [
+            'perPage' => [
                 'sometimes',
                 'integer',
                 Rule::enum(PaginationEnum::class)

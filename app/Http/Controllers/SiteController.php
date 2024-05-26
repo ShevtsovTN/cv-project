@@ -24,7 +24,10 @@ class SiteController extends Controller
     public function index(SitesRequest $request, IndexDTO $dto): SiteCollection
     {
         $dto->setAttributes($request->validated());
-        return SiteCollection::make($this->siteService->getMany($dto));
+
+        $sitesDTO = $this->siteService->getMany($dto);
+        return SiteCollection::make($sitesDTO->getData())
+            ->additional(['paginator' => $sitesDTO->getPaginator()]);
     }
 
     public function store(StoreSiteRequest $request, StoreSiteDTO $storeSiteDTO): SiteResource
