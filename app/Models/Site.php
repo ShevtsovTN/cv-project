@@ -6,14 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @property int id
- * @property mixed name
- * @property mixed url
- * @property mixed provider_key
- * @property mixed created_at
- * @property mixed updated_at
+ * @property string name
+ * @property string url
+ * @property string provider_key
+ * @property string created_at
+ * @property string updated_at
+ * @property-read Collection<Provider> providers
+ * @@property-read Collection<Statistic> statistics
  */
 class Site extends Model
 {

@@ -15,8 +15,10 @@ Route::post('providers/{provider}/sites', [ProviderController::class, 'attachSit
 Route::delete('providers/{provider}/sites/{site}', [ProviderController::class, 'detachSite'])
     ->name('providers.sites.detach');
 
-Route::post('statistics/{site}', [StatisticController::class, 'getAllBySite'])->name('statistics.site');
-Route::post('statistics/{provider}', [StatisticController::class, 'getAllByProvider'])->name('statistics.provider');
+Route::get('statistics/sites/{site}', [StatisticController::class, 'getAllBySite'])
+    ->name('statistics.site');
+Route::get('statistics/providers/{provider}', [StatisticController::class, 'getAllByProvider'])
+    ->name('statistics.provider');
 
 Route::patch(
     'sites/{site}/providers/{provider}/update-fields',

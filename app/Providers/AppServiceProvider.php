@@ -7,8 +7,10 @@ use App\Console\Commands\ProviderTwoStatisticCommand;
 use App\Interfaces\ApiRepositoryStatisticInterface;
 use App\Interfaces\ProviderRepositoryInterface;
 use App\Interfaces\SiteRepositoryInterface;
+use App\Interfaces\StatisticRepositoryInterface;
 use App\Repositories\Entities\ProviderRepository;
 use App\Repositories\Entities\SiteRepository;
+use App\Repositories\Entities\StatisticRepository;
 use App\Repositories\ProviderOneApiRepository;
 use App\Repositories\ProviderTwoApiRepository;
 use Illuminate\Support\Facades\Http;
@@ -23,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(SiteRepositoryInterface::class, SiteRepository::class);
         $this->app->bind(ProviderRepositoryInterface::class, ProviderRepository::class);
+        $this->app->bind(StatisticRepositoryInterface::class, StatisticRepository::class);
 
         $this->app->when([ProviderOneStatisticCommand::class])
             ->needs(ApiRepositoryStatisticInterface::class)

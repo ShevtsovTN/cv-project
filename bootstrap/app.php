@@ -4,6 +4,9 @@ use App\Http\Middleware\AppAccessMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\App;
+use Symfony\Component\HttpFoundation\Response;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,5 +21,21 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+
+        $exceptions->render(function (Exception $e) {
+            $message = match (App::isProduction()) {
+                true => 'Server error',
+                default => $e->getMessage(),
+            };
+            $code = match (App::isProduction()) {
+                true => Response::HTTP_INTERNAL_SERVER_ERROR,
+                default => !empty((int) $e->getCode())
+                    ? (int) $e->getCode()
+                    : Response::HTTP_INTERNAL_SERVER_ERROR,
+            };
+            return new JsonResponse([
+                'message' => $message,
+                'code' => $code,
+            ], $code);
+        });
     })->create();

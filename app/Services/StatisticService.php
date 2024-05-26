@@ -2,32 +2,29 @@
 
 namespace App\Services;
 
-use App\Models\Provider;
-use App\Models\Site;
-use App\Models\Statistic;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Collection as SupportCollection;
+use App\DTO\GetStatisticDTO;
+use App\DTO\StatisticResponseDTO;
+use App\Interfaces\StatisticRepositoryInterface;
+use Illuminate\Support\Collection;
 
-class StatisticService
+readonly class StatisticService
 {
-    public function getAllBySite(Site $site, array $data): Collection
+    public function __construct(private StatisticRepositoryInterface $statisticRepository)
     {
-        return $site->statistics()
-            ->get();
     }
 
-    public function getAllByProvider(Provider $provider, array $data): Collection
+    public function getAllBySite(int $siteId, GetStatisticDTO $dto): StatisticResponseDTO
     {
-        return $provider->statistics()
-            ->get();
+        return $this->statisticRepository->getAllBySite($siteId, $dto);
     }
 
-    public function saveStatistic(SupportCollection $statisticData): void
+    public function getAllByProvider(int $providerId, GetStatisticDTO $dto): StatisticResponseDTO
     {
-        Statistic::query()->upsert(
-            $statisticData->toArray(),
-            ['collected_date', 'site_id'],
-            ['impressions', 'revenue']
-        );
+        return $this->statisticRepository->getAllByProvider($providerId, $dto);
+    }
+
+    public function saveStatistic(Collection $statisticData): void
+    {
+        $this->statisticRepository->saveStatistic($statisticData);
     }
 }

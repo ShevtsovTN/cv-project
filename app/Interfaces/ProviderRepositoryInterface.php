@@ -13,7 +13,7 @@ interface ProviderRepositoryInterface
 {
     public function getMany(IndexDTO $dto);
 
-    public function getById(int $id): ProviderDTO;
+    public function find(int $id): ProviderDTO;
 
     public function getByTechName(string $techName): ProviderDTO;
 

@@ -31,7 +31,7 @@ class ProviderRepository implements ProviderRepositoryInterface
             ->simplePaginate($dto->per_page ?? PaginationEnum::PER_PAGE_10->value);
     }
 
-    public function getById(int $id): ProviderDTO
+    public function find(int $id): ProviderDTO
     {
         /** @var Provider $provider */
         $provider = Provider::query()->findOrFail($id);

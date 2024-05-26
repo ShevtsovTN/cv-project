@@ -27,7 +27,7 @@ readonly class ProviderService
 
     public function getById(int $id): ProviderDTO
     {
-        return $this->providerRepository->getById($id);
+        return $this->providerRepository->find($id);
     }
 
     public function update(int $providerId, UpdateProviderDTO $updateProviderDTO): ProviderDTO

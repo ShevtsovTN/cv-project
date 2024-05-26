@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\GetStatisticDTO;
 use App\Http\Requests\GetStatisticRequest;
-use App\Models\Provider;
-use App\Models\Site;
+use App\Http\Resources\StatisticCollection;
 use App\Services\StatisticService;
-use Illuminate\Database\Eloquent\Collection;
 
 class StatisticController extends Controller
 {
@@ -16,16 +15,32 @@ class StatisticController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function getAllBySite(Site $site, GetStatisticRequest $request): Collection
+    public function getAllBySite(int $site, GetStatisticRequest $request, GetStatisticDTO $dto): StatisticCollection
     {
-        return $this->siteStatisticService->getAllBySite($site, $request->validated());
+        $dto->setAttributes($request->validated());
+
+        $statisticDTO = $this->siteStatisticService->getAllByProvider($site, $dto);
+
+        return StatisticCollection::make($statisticDTO->getStatistics())->additional([
+            'total' => $statisticDTO->getPaginator()->getTotal(),
+            'perPage' => $statisticDTO->getPaginator()->getPerPage(),
+            'page' => $statisticDTO->getPaginator()->getPage(),
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function getAllByProvider(Provider $provider, GetStatisticRequest $request): Collection
+    public function getAllByProvider(int $provider, GetStatisticRequest $request, GetStatisticDTO $dto): StatisticCollection
     {
-        return $this->siteStatisticService->getAllByProvider($provider, $request->validated());
+        $dto->setAttributes($request->validated());
+
+        $statisticDTO = $this->siteStatisticService->getAllByProvider($provider, $dto);
+
+        return StatisticCollection::make($statisticDTO->getStatistics())->additional([
+            'total' => $statisticDTO->getPaginator()->getTotal(),
+            'perPage' => $statisticDTO->getPaginator()->getPerPage(),
+            'page' => $statisticDTO->getPaginator()->getPage(),
+        ]);
     }
 }
