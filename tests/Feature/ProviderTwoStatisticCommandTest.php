@@ -54,6 +54,6 @@ class ProviderTwoStatisticCommandTest extends TestCase
             ->artisan('app:get-provider-two-statistic-command')
             ->assertExitCode(0);
 
-        Http::assertSentCount(1);
+        Http::assertSentCount(2);
     }
 }
