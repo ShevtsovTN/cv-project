@@ -1,66 +1,125 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CV Project
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+#### Project Name: Website Statistics Collection from Providers
 
-## About Laravel
+#### Description:
+This project is an application designed to collect statistical data from various websites using APIs provided by different providers. The main functionalities include:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Integration with various provider APIs to obtain website statistics.
+- Processing and storing the received data in a database.
+- Providing data through an API for other systems and users.
+- Swagger documentation for all available routes and endpoints.
+- Error handling and logging to ensure system reliability.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+#### Key Features:
+1. **Provider API Integration**: Ability to connect and interact with multiple APIs to gather statistics.
+2. **Data Storage**: Storing the collected data in a database for subsequent analysis and usage.
+3. **Data Provision**: API to access the collected statistics.
+4. **Documentation**: Auto-generated Swagger documentation for ease of API usage.
+5. **Error Handling**: Logging and handling errors to ensure the application's robust operation.
+6. **Feature Tests**: Examples for testing core functionalities and routes.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+#### Technology Stack:
+- **Backend**: Laravel
+- **Documentation**: Swagger
+- **Database**: MySQL/PostgreSQL
+- **Testing**: PHPUnit
 
-## Learning Laravel
+# Laravel Project Deployment Guide
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+This guide provides step-by-step instructions for deploying a CV project. Follow these steps to get your project up and running.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Prerequisites
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Ensure you have the following installed on your local machine:
+- Docker
+- Docker Compose
+- Composer
 
-## Laravel Sponsors
+## Steps to Deploy the Project
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. **Clone the Repository**
 
-### Premium Partners
+   Clone the project repository to your local machine using the following command:
+   ```bash
+   git clone https://github.com/ShevtsovTN/cv-project.git
+   cd cv-project
+   ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+2. **Install Dependencies**
 
-## Contributing
+   Install the project dependencies using Composer:
+   ```bash
+   composer install
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. **Copy Environment File**
 
-## Code of Conduct
+   Copy the `.env.example` file to create a new `.env` file:
+   ```bash
+   cp .env.example .env
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. **Generate Application Key**
 
-## Security Vulnerabilities
+   Generate a new application key for the Laravel application:
+   ```bash
+   php artisan key:generate
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5. **Configure Environment Variables**
 
-## License
+   Open the `.env` file and configure the necessary environment variables, including database connection settings. Ensure the database credentials match your local or Dockerized database setup.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+6. **Start Laravel Sail**
+
+   Start the Laravel Sail environment:
+   ```bash
+   ./vendor/bin/sail up -d
+   ```
+
+7. **Run Migrations and Seeders**
+
+   Once the containers are up and running, run the following command to refresh the database and seed it with data:
+   ```bash
+   ./vendor/bin/sail artisan migrate:fresh --seed
+   ```
+
+8. **Access the Application**
+
+   Open your web browser and navigate to `http://localhost` to access the Laravel application.
+
+## Additional Commands
+
+Here are some additional commands you might find useful while working with Laravel Sail:
+
+- **Stop Sail Environment**
+  ```bash
+  ./vendor/bin/sail down
+  ```
+
+- **Execute Artisan Commands**
+  To execute any artisan command within the Sail environment, prefix it with `./vendor/bin/sail`. For example:
+  ```bash
+  ./vendor/bin/sail artisan migrate
+  ```
+
+- **Access Container Shell**
+  To access the shell of the running container:
+  ```bash
+  ./vendor/bin/sail shell
+  ```
+
+## Troubleshooting
+
+- **Database Connection Issues**
+  Ensure that the database credentials in your `.env` file match the settings in the `docker-compose.yml` file.
+
+- **Docker Issues**
+  Ensure Docker and Docker Compose are running correctly on your system. Restart Docker if necessary.
+
+For further assistance, refer to the [Laravel Sail documentation](https://laravel.com/docs/sail) or the [Laravel documentation](https://laravel.com/docs).
+
+---
+
+By following this guide, you should be able to deploy and run your Laravel project successfully. If you encounter any issues, refer to the troubleshooting section or consult the Laravel documentation for more detailed information.

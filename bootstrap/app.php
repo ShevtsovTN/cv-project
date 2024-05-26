@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -33,6 +34,13 @@ return Application::configure(basePath: dirname(__DIR__))
                     ? (int) $e->getCode()
                     : Response::HTTP_INTERNAL_SERVER_ERROR,
             };
+
+            Log::channel('slack')->error($e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
             return new JsonResponse([
                 'message' => $message,
                 'code' => $code,
