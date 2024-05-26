@@ -10,9 +10,33 @@ use OpenApi\Annotations as OA;
  * Class AttachSiteRequest
  * @package App\Http\Requests
  *
- * @property int site_id
- * @property bool active
- * @property string external_id
+ * @property int $site_id
+ * @property bool $active
+ * @property string $external_id
+ *
+ * @OA\Schema(
+ *     schema="AttachSiteRequest",
+ *     required={"site_id", "active", "external_id"},
+ *     @OA\Property(
+ *         property="site_id",
+ *         type="integer",
+ *         description="The ID of the site",
+ *         example=1
+ *     ),
+ *     @OA\Property(
+ *         property="active",
+ *         type="boolean",
+ *         description="Whether the site is active",
+ *         example=true
+ *     ),
+ *     @OA\Property(
+ *         property="external_id",
+ *         type="string",
+ *         description="The external ID of the site",
+ *         example="ext12345",
+ *         maxLength=255
+ *     )
+ * )
  */
 class AttachSiteRequest extends FormRequest
 {

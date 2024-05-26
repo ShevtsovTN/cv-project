@@ -15,7 +15,7 @@ use OpenApi\Annotations as OA;
  * @property int $perPage
  *
  * @OA\Schema(
- *     schema="ProviderRequest",
+ *     schema="SiteRequest",
  *     @OA\Property(
  *         property="search",
  *         type="string",
@@ -27,9 +27,9 @@ use OpenApi\Annotations as OA;
  *     @OA\Property(
  *         property="sortBy",
  *         type="string",
- *         enum={"id", "name", "active"},
+ *         enum={"id", "name", "url", "provider_key"},
  *         description="Field to sort by",
- *         example="id"
+ *         example="name"
  *     ),
  *     @OA\Property(
  *         property="direction",
@@ -55,7 +55,7 @@ use OpenApi\Annotations as OA;
  *     )
  * )
  */
-class ProviderRequest extends FormRequest
+class SiteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -77,7 +77,7 @@ class ProviderRequest extends FormRequest
             'sortBy' => [
                 'sometimes',
                 'string',
-                'in:id,name,active',
+                'in:id,name,url,provider_key',
             ],
             'direction' => [
                 'sometimes',

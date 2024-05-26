@@ -9,7 +9,7 @@ use App\DTO\PaginatorDTO;
 use App\DTO\ProviderDTO;
 use App\DTO\ResponseDTO;
 use App\DTO\SiteDTO;
-use App\DTO\StatisticSiteDTO;
+use App\DTO\SiteForProviderDTO;
 use App\DTO\StoreProviderDTO;
 use App\DTO\UpdateProviderDTO;
 use App\Enums\PaginationEnum;
@@ -181,7 +181,7 @@ class ProviderRepository implements ProviderRepositoryInterface
             ->get()
         ->flatMap(function (Provider $provider) {
             return collect($provider['sites'])->map(function ($site) {
-                return new StatisticSiteDTO([
+                return new SiteForProviderDTO([
                     'id' => $site['pivot']['site_id'],
                     'external_id' => $site['pivot']['external_id']
                 ]);

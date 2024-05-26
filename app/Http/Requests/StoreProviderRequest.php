@@ -7,7 +7,33 @@ use OpenApi\Annotations as OA;
 
 /**
  * @property string $name
+ * @property string $tech_name
  * @property bool $active
+ *
+ * @OA\Schema(
+ *     schema="StoreProviderRequest",
+ *     required={"name", "tech_name", "active"},
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
+ *         description="The name of the provider",
+ *         example="Example Provider",
+ *         maxLength=255
+ *     ),
+ *     @OA\Property(
+ *         property="tech_name",
+ *         type="string",
+ *         description="The technical name of the provider",
+ *         example="example_provider",
+ *         maxLength=255
+ *     ),
+ *     @OA\Property(
+ *         property="active",
+ *         type="boolean",
+ *         description="Whether the provider is active",
+ *         example=true
+ *     )
+ * )
  */
 class StoreProviderRequest extends FormRequest
 {

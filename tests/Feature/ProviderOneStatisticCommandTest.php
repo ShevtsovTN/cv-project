@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\DTO\StatisticSiteDTO;
+use App\DTO\SiteForProviderDTO;
 use App\Models\Provider;
 use Illuminate\Support\Facades\Http;
 use Random\RandomException;
@@ -23,7 +23,7 @@ class ProviderOneStatisticCommandTest extends TestCase
 
         $sites = $provider->flatMap(function ($provider) {
             return $provider->sites;
-        })->map(fn ($site) => new StatisticSiteDTO([
+        })->map(fn ($site) => new SiteForProviderDTO([
             'id' => $site->id,
             'external_id' => $site->pivot->external_id,
         ]));

@@ -2,7 +2,7 @@
 
 namespace App\DTO;
 
-class StatisticSiteDTO extends BaseDTO
+class SiteForProviderDTO extends BaseDTO
 {
     public int $id;
     public string $external_id;

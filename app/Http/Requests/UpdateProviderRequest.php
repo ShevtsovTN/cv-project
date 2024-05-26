@@ -5,6 +5,29 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use OpenApi\Annotations as OA;
 
+/**
+ * @property string $name
+ * @property string $url
+ * @property string $provider_key
+ *
+ * @OA\Schema(
+ *     schema="UpdateProviderRequest",
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
+ *         description="The name of the provider",
+ *         example="Example Provider Name",
+ *         maxLength=255,
+ *         minLength=5
+ *     ),
+ *     @OA\Property(
+ *         property="active",
+ *         type="boolean",
+ *         description="The active status of the provider",
+ *         example="true",
+ *     )
+ * )
+ */
 class UpdateProviderRequest extends FormRequest
 {
     /**
@@ -20,7 +43,7 @@ class UpdateProviderRequest extends FormRequest
         $providerId = $this->route('provider');
 
         return [
-            'name' => 'sometimes|string|max:255|unique:providers,name,' . $providerId,
+            'name' => 'sometimes|string|max:255|min:5|unique:providers,name,' . $providerId,
             'active' => 'sometimes|boolean',
         ];
     }

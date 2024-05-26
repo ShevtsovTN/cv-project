@@ -5,7 +5,9 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+                'title' => 'My CV project.',
+                'description' => 'This is the API documentation for CV project.',
+                'version' => '1.0.0',
             ],
 
             'routes' => [
