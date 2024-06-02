@@ -18,16 +18,19 @@ readonly class SiteService
 
     public function getMany(IndexDTO $dto)
     {
+        // Some logic here
         return $this->siteRepository->getMany($dto);
     }
 
     public function create(StoreSiteDTO $storeSiteDTO): SiteDTO
     {
+        // Some logic here
         return $this->siteRepository->create($storeSiteDTO);
     }
 
     public function getById(int $id): SiteDTO
     {
+        // Some logic here
         return $this->siteRepository->find($id);
     }
 
@@ -39,6 +42,7 @@ readonly class SiteService
 
     public function delete(int $siteId): void
     {
+        // Some logic here
         $this->siteRepository->delete($siteId);
     }
 
@@ -47,6 +51,7 @@ readonly class SiteService
         int $providerId,
         UpdateProviderSiteDTO $updateProviderSiteDTO
     ): void {
+        // Some logic here
         $this->siteRepository->updateExistingPivot($siteId, $providerId, $updateProviderSiteDTO);
     }
 }

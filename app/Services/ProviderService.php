@@ -17,16 +17,19 @@ readonly class ProviderService
 
     public function getMany(IndexDTO $dto)
     {
+        // Some logic here
         return $this->providerRepository->getMany($dto);
     }
 
     public function create(StoreProviderDTO $providerDTO): ProviderDTO
     {
+        // Some logic here
         return $this->providerRepository->create($providerDTO);
     }
 
     public function getById(int $id): ProviderDTO
     {
+        // Some logic here
         return $this->providerRepository->find($id);
     }
 
@@ -38,16 +41,19 @@ readonly class ProviderService
 
     public function delete(int $provider): void
     {
+        // Some logic here
         $this->providerRepository->delete($provider);
     }
 
     public function attachSite(int $provider, AttachSiteDTO $attachSiteDTO): void
     {
+        // Some logic here
         $this->providerRepository->attachSite($provider, $attachSiteDTO);
     }
 
     public function detachSite(int $provider, int $siteId): void
     {
+        // Some logic here
         $this->providerRepository->detachSite($provider, $siteId);
     }
 }

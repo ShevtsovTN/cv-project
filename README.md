@@ -6,18 +6,27 @@
 This project is an application designed to collect statistical data from various websites using APIs provided by different providers. The main functionalities include:
 
 - Integration with various provider APIs to obtain website statistics.
-- Processing and storing the received data in a database.
+- Processing and storing the received data using the repository pattern, allowing flexibility in data storage and retrieval from different sources.
 - Providing data through an API for other systems and users.
 - Swagger documentation for all available routes and endpoints.
 - Error handling and logging to ensure system reliability.
 
 #### Key Features:
 1. **Provider API Integration**: Ability to connect and interact with multiple APIs to gather statistics.
-2. **Data Storage**: Storing the collected data in a database for subsequent analysis and usage.
+2. **Data Storage and Retrieval**: Using the repository pattern to store and retrieve data, allowing for flexibility in data sources (e.g., databases, file systems, external services).
 3. **Data Provision**: API to access the collected statistics.
 4. **Documentation**: Auto-generated Swagger documentation for ease of API usage.
 5. **Error Handling**: Logging and handling errors to ensure the application's robust operation.
 6. **Feature Tests**: Examples for testing core functionalities and routes.
+
+#### Repository Pattern Implementation
+The repository pattern is used to abstract the data access logic and business logic, allowing the application to use different data sources seamlessly. This implementation supports data management for the following entities:
+
+1. **Site Repository**: Handles data operations for the `Site` entity.
+2. **Provider Repository**: Manages interactions with various provider APIs and handles data for the `Provider` entity.
+3. **Statistic Repository**: Manages the collection and storage of statistical data from various sources for the `Statistic` entity.
+
+By using the repository pattern, this project ensures that the data layer is flexible and easily extensible, promoting cleaner architecture and easier maintenance.
 
 #### Technology Stack:
 - **Backend**: Laravel
