@@ -7,6 +7,8 @@ use App\Interfaces\ApiRepositoryStatisticInterface;
 use App\Interfaces\Example\ProviderInterface;
 use App\Services\StatisticService;
 use Carbon\CarbonImmutable;
+use Exception;
+use http\Exception\RuntimeException;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Carbon;
@@ -45,7 +47,11 @@ class BaseStatisticCommand extends Command
             ]);
         }
 
-        $statisticData = $apiRepositoryStatistic->getStatistics($provider, $datetimeHelper);
+        try {
+            $statisticData = $apiRepositoryStatistic->getStatistics($provider, $datetimeHelper);
+        } catch (Exception $e) {
+            throw new RuntimeException('Error while getting statistics from API', 500, $e);
+        }
 
         if ($this->option('d')) {
             $statisticData = $statisticData->groupBy(function ($item) {
