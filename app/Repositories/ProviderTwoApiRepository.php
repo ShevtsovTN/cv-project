@@ -7,7 +7,6 @@ use App\Http\Middleware\CustomMiddleware\ProviderTwoApiMiddleware;
 use App\Http\Middleware\CustomMiddleware\ProviderTwoCredentialsMiddleware;
 use App\Interfaces\ApiRepositoryStatisticInterface;
 use App\Interfaces\Example\ProviderInterface;
-use GuzzleHttp\Promise\Utils;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use RuntimeException;
@@ -46,7 +45,8 @@ class ProviderTwoApiRepository extends AbstractApiRepository implements ApiRepos
 
         $sites = $provider->getActiveSites();
 
-        [$dateFrom, $dateTo] = $datetimeHelper->getIntervalWithFormat('Y-m-d');
+        $dateFrom = $datetimeHelper->dateFrom->format('Y-m-d');
+        $dateTo = $datetimeHelper->dateTo->format('Y-m-d');
 
         $response = $this->apiGetStatisticsSync([
             'dateFrom' => $dateFrom,

@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int id
- * @property mixed provider_id
- * @property mixed collected_at
- * @property mixed collected_date
- * @property mixed site_id
- * @property mixed impressions
- * @property mixed revenue
- * @property mixed created_at
- * @property mixed updated_at
+ * @property int provider_id
+ * @property int collected_at
+ * @property string collected_date
+ * @property int site_id
+ * @property int impressions
+ * @property float revenue
+ * @property string created_at
+ * @property string updated_at
  */
 class Statistic extends Model
 {

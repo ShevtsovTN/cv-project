@@ -32,11 +32,13 @@ class BaseProvider implements ProviderInterface
 
     public function getActiveSites(): Collection
     {
-        return $this->getConfig()->getProviderRepository()->getSitesForStatistic(
-            $this->getConfig()->getId(),
-            [
-                'active' => true,
-            ]
-        );
+        return $this->getConfig()
+            ->getProviderRepository()
+            ->getSitesForStatistic(
+                $this->getConfig()->getId(),
+                [
+                    'active' => true,
+                ]
+            );
     }
 }

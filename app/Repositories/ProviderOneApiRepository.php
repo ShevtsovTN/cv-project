@@ -43,7 +43,8 @@ class ProviderOneApiRepository extends AbstractApiRepository implements ApiRepos
 
         $promises = [];
 
-        [$dateFrom, $dateTo] = $datetimeHelper->getIntervalWithFormat('Y-m-d');
+        $dateFrom = $datetimeHelper->dateFrom->format('Y-m-d');
+        $dateTo = $datetimeHelper->dateTo->format('Y-m-d');
 
         foreach ($sites as $site) {
             $promises[$site->id] = $this->apiGetSiteStatistics(
@@ -52,7 +53,7 @@ class ProviderOneApiRepository extends AbstractApiRepository implements ApiRepos
                     'endDate' => $dateTo,
                     'dimensions' => 'date',
                     'metrics' => 'impressions,revenue',
-                    'timeZone' => $datetimeHelper->tz(),
+                    'timeZone' => $datetimeHelper->getTimezone(),
                 ],
                 [
                     'id' => $site->external_id,

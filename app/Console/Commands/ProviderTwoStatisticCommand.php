@@ -14,7 +14,7 @@ class ProviderTwoStatisticCommand extends BaseStatisticCommand
      *
      * @var string
      */
-    protected $signature = 'app:get-provider-two-statistic-command {from?} {to?} {tz=UTC} {--d}';
+    protected $signature = 'app:get-provider-two-statistic-command {from?} {to?} {tz=Europe/Madrid} {--d}';
 
     /**
      * The console command description.

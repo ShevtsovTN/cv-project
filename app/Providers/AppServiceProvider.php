@@ -11,8 +11,11 @@ use App\Interfaces\StatisticRepositoryInterface;
 use App\Repositories\Entities\ProviderRepository;
 use App\Repositories\Entities\SiteRepository;
 use App\Repositories\Entities\StatisticRepository;
+use App\Repositories\Fake\FakeProviderOneApiRepository;
+use App\Repositories\Fake\FakeProviderTwoApiRepository;
 use App\Repositories\ProviderOneApiRepository;
 use App\Repositories\ProviderTwoApiRepository;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 
@@ -31,14 +34,20 @@ class AppServiceProvider extends ServiceProvider
             ->needs(ApiRepositoryStatisticInterface::class)
             ->give(function () {
                 $httpClient = Http::baseUrl(config('api.ProviderOne.url'));
-                return new ProviderOneApiRepository($httpClient);
+                return match (App::isLocal()) {
+                    true => new FakeProviderOneApiRepository(),
+                    default => new ProviderOneApiRepository($httpClient),
+                };
             });
 
         $this->app->when([ProviderTwoStatisticCommand::class])
             ->needs(ApiRepositoryStatisticInterface::class)
             ->give(function () {
                 $httpClient = Http::baseUrl(config('api.ProviderTwo.url'));
-                return new ProviderTwoApiRepository($httpClient);
+                return match (App::isLocal()) {
+                    true => new FakeProviderTwoApiRepository(),
+                    default => new ProviderTwoApiRepository($httpClient),
+                };
             });
     }
 
