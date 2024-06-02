@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @property string tech_name
  * @property-read Collection<Site> sites
  * @property-read Collection<Statistic> statistics
+ * @property-read mixed $pivot
  */
 class Provider extends Model
 {
@@ -26,6 +27,10 @@ class Provider extends Model
         'name',
         'tech_name',
         'active',
+    ];
+
+    protected $casts = [
+        'active' => 'boolean',
     ];
 
     public function sites(): BelongsToMany

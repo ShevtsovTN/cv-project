@@ -13,26 +13,22 @@ return new class extends Migration
     {
         Schema::create('provider_site', static function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('provider_id');
-            $table->unsignedBigInteger('site_id');
             $table->boolean('active')->default(true);
             $table->string('external_id');
 
             $table->timestamps();
 
-            $table->foreign('provider_id')
-                ->references('id')
-                ->on('providers')
+            $table->foreignId('provider_id')
+                ->constrained()
                 ->onDelete('cascade');
-            $table->foreign('site_id')
-                ->references('id')
-                ->on('sites')
+            $table->foreignId('site_id')
+                ->constrained()
                 ->onDelete('cascade');
 
             $table->index('provider_id');
             $table->index('site_id');
             $table->index('active');
-            $table->unique(['provider_id', 'site_id', 'external_id']);
+            $table->unique(['provider_id', 'site_id', 'external_id'], 'unique_provider_site');
         });
     }
 

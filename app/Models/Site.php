@@ -16,7 +16,8 @@ use Illuminate\Database\Eloquent\Collection;
  * @property string created_at
  * @property string updated_at
  * @property-read Collection<Provider> providers
- * @@property-read Collection<Statistic> statistics
+ * @property-read Collection<Statistic> statistics
+ * @property-read mixed $pivot
  */
 class Site extends Model
 {

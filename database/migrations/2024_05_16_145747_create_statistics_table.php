@@ -13,22 +13,18 @@ return new class extends Migration
     {
         Schema::create('statistics', static function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('provider_id');
-            $table->unsignedBigInteger('site_id');
             $table->unsignedInteger('collected_at');
             $table->date('collected_date');
             $table->bigInteger('impressions')->default(0);
             $table->decimal('revenue', 15, 2)->default(0.00);
             $table->timestamps();
 
-            $table->foreign('site_id')
-                ->references('id')
-                ->on('sites')
+            $table->foreignId('site_id')
+                ->constrained()
                 ->onDelete('cascade');
 
-            $table->foreign('provider_id')
-                ->references('id')
-                ->on('providers')
+            $table->foreignId('provider_id')
+                ->constrained()
                 ->onDelete('cascade');
 
             $table->index('collected_at');

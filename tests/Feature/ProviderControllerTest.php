@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Provider;
 use App\Models\Site;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Random\RandomException;
@@ -11,6 +12,8 @@ use Tests\TestCase;
 
 class ProviderControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     public string $token;
 
     protected function setUp(): void
@@ -23,10 +26,28 @@ class ProviderControllerTest extends TestCase
 
     public function testIndex(): void
     {
+        $provider = Provider::factory()->create();
         $response = $this
             ->withHeader('Authorization', $this->token)
             ->get(route('providers.index'));
 
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'id',
+                    'name',
+                    'active',
+                    'created_at',
+                    'updated_at',
+                ],
+            ]
+        ]);
+
+        $providerIdFromResponse = $response['data'][0]['id'];
+        $this->assertModelExists(
+            Provider::query()->find($providerIdFromResponse)
+        );
+        $this->assertEquals($provider->id, $providerIdFromResponse);
         $response->assertStatus(200);
     }
 
@@ -47,14 +68,21 @@ class ProviderControllerTest extends TestCase
     public function testStore(): void
     {
         $providerName = 'Test Provider - ' . random_int(1, 100000);
+        $techName = Str::ucfirst(Str::camel($providerName));
         $response = $this
             ->withHeader('Authorization', $this->token)
             ->post(route('providers.store'), [
                 'name' => $providerName,
-                'tech_name' => Str::ucfirst(Str::camel($providerName)),
+                'tech_name' => $techName,
                 'active' => 0,
             ]);
 
+        $this->assertModelExists(
+            Provider::query()->where([
+                'name' => $providerName,
+                'tech_name' => $techName,
+            ])->first()
+        );
         $response->assertStatus(200);
     }
 

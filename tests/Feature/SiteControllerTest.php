@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Provider;
 use App\Models\Site;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Random\RandomException;
@@ -11,6 +12,8 @@ use Tests\TestCase;
 
 class SiteControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     public string $token;
 
     protected function setUp(): void
@@ -23,10 +26,30 @@ class SiteControllerTest extends TestCase
 
     public function testIndex(): void
     {
+        $site = Site::factory()->create();
+
         $response = $this
             ->withHeader('Authorization', $this->token)
             ->get(route('sites.index'));
 
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'id',
+                    'name',
+                    'url',
+                    'provider_key',
+                    'created_at',
+                    'updated_at',
+                ],
+            ]
+        ]);
+
+        $siteIdFromResponse = $response['data'][0]['id'];
+        $this->assertModelExists(
+            Site::query()->find($siteIdFromResponse)
+        );
+        $this->assertEquals($site->id, $siteIdFromResponse);
         $response->assertStatus(200);
     }
 
@@ -46,14 +69,24 @@ class SiteControllerTest extends TestCase
      */
     public function testStore(): void
     {
+        $url = 'https://test-site-' . random_int(1, 10000) . '.com';
+        $name = 'Test Site - ' . random_int(1, 100000);
+        $providerKey = Str::uuid()->toString();
         $response = $this
             ->withHeader('Authorization', $this->token)
             ->post(route('sites.store'), [
-                'name' => 'Test Site - ' . random_int(1, 100000),
-                'url' => 'https://test-site-' . random_int(1, 10000) . '.com',
-                'provider_key' => Str::uuid()->toString(),
+                'name' => $name,
+                'url' => $url,
+                'provider_key' => $providerKey,
             ]);
 
+        $this->assertModelExists(
+            Site::query()->where([
+                'name' => $name,
+                'url' => $url,
+                'provider_key' => $providerKey,
+            ])->first()
+        );
         $response->assertStatus(200);
     }
 

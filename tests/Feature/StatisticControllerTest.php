@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Provider;
 use App\Models\Site;
 use App\Models\Statistic;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Random\RandomException;
@@ -12,6 +13,8 @@ use Tests\TestCase;
 
 class StatisticControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     public string $token;
 
     protected function setUp(): void
@@ -28,29 +31,33 @@ class StatisticControllerTest extends TestCase
     public function testIndexBySite(): void
     {
         /** @var Provider $provider */
-        $provider = Provider::query()
-            ->with(['sites' => function ($query) {
-                $query->wherePivot('active', true);
-            }])
-            ->where('tech_name', 'ProviderOne')
-            ->first();
+        $provider = Provider::factory()->create([
+            'name' => 'Random Provider - '.random_int(1, 100),
+            'active' => true,
+        ]);
 
         /** @var Site $site */
-        $site = $provider->sites->first();
+        $site = Site::factory()->create([
+            'name' => 'Random Site - '.random_int(1, 100),
+            'url' => 'https://random-site.com',
+            'provider_key' => Str::uuid()->toString(),
+        ]);
+
+        $provider->sites()->attach($site, [
+            'active' => true,
+            'external_id' => Str::uuid()->toString(),
+        ]);
 
         /** @var Statistic $statisticObj */
-        $statisticObj = Statistic::query()->firstOrCreate(
-            [
-                'site_id' => $provider->id,
-                'provider_id' => $site->id,
-            ],
-            [
+        $statisticObj = Statistic::factory()
+            ->for($provider, 'provider')
+            ->for($site, 'site')
+            ->create([
                 'collected_at' => time(),
                 'collected_date' => date('Y-m-d'),
                 'impressions' => random_int(1, 1000),
                 'revenue' => random_int(1, 1000),
-            ]
-        );
+            ]);
 
         $response = $this
             ->withHeader('Authorization', $this->token)
@@ -66,29 +73,35 @@ class StatisticControllerTest extends TestCase
     public function testIndexByProvider(): void
     {
         /** @var Provider $provider */
-        $provider = Provider::query()
-            ->with(['sites' => function ($query) {
-                $query->wherePivot('active', true);
-            }])
-            ->where('tech_name', 'ProviderOne')
-            ->first();
+        $provider = Provider::factory()->create([
+            'name' => 'Random Provider - '.random_int(1, 100),
+            'active' => true,
+        ]);
 
         /** @var Site $site */
-        $site = $provider->sites->first();
+        $site = Site::factory()->create([
+            'name' => 'Random Site - '.random_int(1, 100),
+            'url' => 'https://random-site.com',
+            'provider_key' => Str::uuid()->toString(),
+        ]);
+
+        $provider->sites()->attach($site, [
+            'active' => true,
+            'external_id' => Str::uuid()->toString(),
+        ]);
 
         /** @var Statistic $statisticObj */
-        $statisticObj = Statistic::query()->firstOrCreate(
-            [
+        $statisticObj = Statistic::factory()
+            ->for($provider, 'provider')
+            ->for($site, 'site')
+            ->create([
                 'site_id' => $provider->id,
                 'provider_id' => $site->id,
-            ],
-            [
                 'collected_at' => time(),
                 'collected_date' => date('Y-m-d'),
                 'impressions' => random_int(1, 1000),
                 'revenue' => random_int(1, 1000),
-            ]
-        );
+            ]);
 
         $response = $this
             ->withHeader('Authorization', $this->token)

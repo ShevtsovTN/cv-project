@@ -94,7 +94,7 @@ class StatisticController extends Controller
     {
         $dto->setAttributes($request->validated());
 
-        $statisticDTO = $this->siteStatisticService->getAllByProvider($site, $dto);
+        $statisticDTO = $this->siteStatisticService->getAllBySite($site, $dto);
 
         return StatisticCollection::make($statisticDTO->getData())->additional([
             'total' => $statisticDTO->getPaginator()->getTotal(),
